@@ -4,6 +4,9 @@ from django.views.generic import ListView, DetailView
 # 自分で作ったPostモデルを取り込み
 from .models import Post
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+
 # 一覧
 class Index(ListView):
     # 一覧するモデルを指定 -> `object_list`で取得可能
@@ -15,7 +18,6 @@ class Detail(DetailView):
     model = Post
     
 
-from django.views.generic.edit import CreateView
 
 class Create(CreateView):
     model = Post
@@ -24,14 +26,12 @@ class Create(CreateView):
     fields = ["title", "body", "category", "tags"]
     
 
-from django.views.generic.edit import UpdateView
 
 class Update(UpdateView):
     model = Post
     fields = ["title", "body", "category", "tags"]
     
     
-from django.views.generic.edit import DeleteView
 
 class Delete(DeleteView):
     model = Post
