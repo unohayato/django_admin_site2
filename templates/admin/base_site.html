@@ -3,3 +3,13 @@
 {% block welcome-msg %}
   <strong>{{ user }}</strong>
 {% endblock welcome-msg %}
+
+{% load static %}
+
+{% block extrastyle %}
+  {% block super %}
+    <link rel="stylesheet" type="text/css" href="{% static 'base_site.css' %}">
+  
+  {% endblock super %}
+
+{% endblock extrastyle %}
