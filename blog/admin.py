@@ -30,7 +30,7 @@ class PostTitleFilter(admin.SimpleListFilter):
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
   
-  list_display = ('id', 'title', 'category', 'tags_summary', 'created', 'updated')
+  list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
   list_select_related = ('category', )
   list_editable = ('title', 'category')
   search_fields = ('title', 'category__name', 'tags__name', 'created', 'updated')
@@ -46,6 +46,19 @@ class PostAdmin(admin.ModelAdmin):
   
   def get_queryset(self, request):
     return super().get_queryset(request).prefetch_related('tags')
+
+  actions = ["publish", "unpublish"]
+
+  def publish(self, request, queryset):
+      queryset.update(published=True)
+      
+  publish.short_description = "公開する"
+      
+  def unpublish(self, request, queryset):
+      queryset.update(published=False)
+      
+  unpublish.short_description = "下書きに戻す"
+
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.admin import AdminSite
