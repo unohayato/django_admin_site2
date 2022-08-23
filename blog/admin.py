@@ -17,6 +17,7 @@ class PostAdmin(admin.ModelAdmin):
   list_display = ('id', 'title', 'category', 'tags_summary', 'created', 'updated')
   list_select_related = ('category', )
   list_editable = ('title', 'category')
+  search_fields = ('title', 'category__name', 'tags__name', 'created', 'updated')
   
   def tags_summary(self, obj):
     qs = obj.tags.all()
