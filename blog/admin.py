@@ -13,7 +13,16 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
-    pass
+  
+  list_display = ('id', 'title', 'category', 'tags_summary', 'created', 'updated')
+  list_select_related = ('category', )
+  
+  def tags_summary(self, obj):
+    qs = obj.tags.all()
+    label = ', '.join(map(str, qs))
+    return label
+  
+  tags_summary.short_description = "tags"
   
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.admin import AdminSite
