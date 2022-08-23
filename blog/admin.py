@@ -24,6 +24,9 @@ class PostAdmin(admin.ModelAdmin):
   
   tags_summary.short_description = "tags"
   
+  def get_queryset(self, request):
+    return super().get_queryset(request).prefetch_related('tags')
+
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.admin import AdminSite
 
