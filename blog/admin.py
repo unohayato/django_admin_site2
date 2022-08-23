@@ -10,6 +10,22 @@ class CategoryAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     pass
 
+class PostTitleFilter(admin.SimpleListFilter):
+    title = '本文'
+    parameter_name = 'body_contains'
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            return queryset.filter(body__icontains=self.value())
+        return queryset
+
+    def lookups(self, request, model_admin):
+        return [
+            ("ブログ", "「ブログ」を含む"),
+            ("日記", "「日記」を含む"),
+            ("開発", "「開発」を含む"),
+        ]
+
 
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
@@ -19,7 +35,7 @@ class PostAdmin(admin.ModelAdmin):
   list_editable = ('title', 'category')
   search_fields = ('title', 'category__name', 'tags__name', 'created', 'updated')
   ordering = ('-updated', '-created')
-  list_filter = ('category', 'tags', 'created', 'updated')
+  list_filter = (PostTitleFilter, 'category', 'tags', 'created', 'updated')
   
   def tags_summary(self, obj):
     qs = obj.tags.all()
