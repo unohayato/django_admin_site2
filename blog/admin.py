@@ -29,7 +29,11 @@ class PostTitleFilter(admin.SimpleListFilter):
 
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
+  #個別
+  readonly_fields = ('created', 'updated')
+  fields = ('title', 'body', 'category', 'tags', 'published', 'created', 'updated')
   
+  #リスト
   list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
   list_select_related = ('category', )
   list_editable = ('title', 'category')
