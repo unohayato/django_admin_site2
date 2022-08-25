@@ -1,3 +1,4 @@
+from dataclasses import field
 from django.contrib import admin
 from . import models
 
@@ -31,7 +32,12 @@ class PostTitleFilter(admin.SimpleListFilter):
 class PostAdmin(admin.ModelAdmin):
   #個別
   readonly_fields = ('created', 'updated')
-  fields = ('title', 'body', 'category', 'tags', 'published', 'created', 'updated')
+  fieldsets = [
+    (None, {'fields': ('title', )}),
+    ('コンテンツ', {'fields': ('body', )}),
+    ('分類', {'fields': ('category', 'tags')}),
+    ('メタ', {'fields': ('created', 'updated')}),
+  ]
   
   #リスト
   list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
