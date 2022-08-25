@@ -27,6 +27,16 @@ class PostTitleFilter(admin.SimpleListFilter):
             ("開発", "「開発」を含む"),
         ]
 
+from django import forms
+
+class PostAdminForm(forms.ModelForm):
+    class Meta:
+        labels = {
+            'title': 'ブログタイトル',
+        }
+
+
+
 
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
@@ -38,6 +48,8 @@ class PostAdmin(admin.ModelAdmin):
     ('分類', {'fields': ('category', 'tags')}),
     ('メタ', {'fields': ('created', 'updated')}),
   ]
+  
+  form = PostAdminForm
   
   #リスト
   list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
