@@ -2,14 +2,6 @@ from dataclasses import field
 from django.contrib import admin
 from . import models
 
-@admin.register(models.Category)
-class CategoryAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(models.Tag)
-class TagAdmin(admin.ModelAdmin):
-    pass
 
 class PostTitleFilter(admin.SimpleListFilter):
     title = '本文'
@@ -27,13 +19,33 @@ class PostTitleFilter(admin.SimpleListFilter):
             ("開発", "「開発」を含む"),
         ]
 
+class PostInline(admin.TabularInline):
+  model = models.Post
+  fields = ('title', 'body')
+  extra = 1
+
+
+@admin.register(models.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    inlines = [PostInline]
+
+
+@admin.register(models.Tag)
+class TagAdmin(admin.ModelAdmin):
+    pass
 from django import forms
 
 class PostAdminForm(forms.ModelForm):
     class Meta:
         labels = {
             'title': 'ブログタイトル',
+            
         }
+        
+    def clean(self):
+      body = self.cleaned_data.get('body')
+      if '<' in body:
+          raise forms.ValidationError('HTMLタグは使えません。')
 
 
 
@@ -50,7 +62,7 @@ class PostAdmin(admin.ModelAdmin):
   ]
   
   form = PostAdminForm
-  
+  filter_horizontal = ('tags',)
   #リスト
   list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
   list_select_related = ('category', )
