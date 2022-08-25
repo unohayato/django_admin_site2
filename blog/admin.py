@@ -30,6 +30,8 @@ class CategoryAdmin(admin.ModelAdmin):
     inlines = [PostInline]
 
 
+
+
 @admin.register(models.Tag)
 class TagAdmin(admin.ModelAdmin):
     pass
@@ -63,6 +65,12 @@ class PostAdmin(admin.ModelAdmin):
   
   form = PostAdminForm
   filter_horizontal = ('tags',)
+  
+  def save_model(self, request, obj, form, change):
+    print('before save')
+    super().save_model(request, obj, form, change)
+    print('after save')
+  
   #リスト
   list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
   list_select_related = ('category', )
